@@ -46,20 +46,22 @@ export class CadastroComponent {
   };
 
   // salvar cliente
-  salvar() {
+salvar() {
 
-  if (this.cliente.id) {
-    // UPDATE
-    this.clienteService.atualizar(this.cliente).subscribe(() => {
-      this.router.navigate(['/consulta']);
-    });
+  alert("Entrou no salvar!");
 
-  } else {
-    // CREATE
-    this.clienteService.salvar(this.cliente).subscribe(() => {
-      this.router.navigate(['/consulta']);
-    });
-  }
+  this.clienteService.salvar(this.cliente).subscribe({
+    next: (cliente) => {
+      console.log(cliente);
+      alert("Salvou com sucesso!");
+      this.limpar();
+    },
+    error: (erro) => {
+      console.error(erro);
+      alert("Deu erro!");
+    }
+  });
+
 }
 
   // limpar formulário

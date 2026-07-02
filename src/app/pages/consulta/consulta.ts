@@ -1,56 +1,71 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatTableModule } from '@angular/material/table';
+import { FormsModule } from '@angular/forms';
+import { ConsultaService, Consulta } from '../../services/consulta.service';
 import { ClienteService } from '../../services/cliente.service';
 import { Cliente } from '../../models/cliente';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-consulta',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatTableModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './consulta.html',
   styleUrl: './consulta.scss'
 })
 export class ConsultaComponent {
 
-  private router = inject(Router);
-
+  private consultaService = inject(ConsultaService);
   private clienteService = inject(ClienteService);
 
-  clientes: Cliente[] = [];
+  consultas: Consulta[] = [];
+  pacientes: Cliente[] = [];
 
-  displayedColumns = [
-    'nome',
-    'dataPrimeiraConsulta',
-    'telefone',
-    'email',
-    'acoes'
-  ];
+  dataConsulta = '';
+  observacoes = '';
+  pacienteSelecionado!: number;
 
-  constructor() {
-    this.carregarClientes();
+  ngOnInit() {
+    this.carregarConsultas();
+    this.carregarPacientes();
   }
 
-  carregarClientes() {
-  this.clienteService.listar().subscribe(data => {
-    this.clientes = data;
-  });
-}
-
-  editar(cliente: Cliente) {
-    this.router.navigate(['/cadastro'], {
-      state: { cliente }
+  carregarConsultas() {
+    this.consultaService.listar().subscribe(res => {
+      this.consultas = res;
     });
   }
 
-  excluir(cliente: Cliente) {
-  this.clienteService.excluir(cliente.id!).subscribe(() => {
-    this.carregarClientes();
-  });
-}
+  carregarPacientes() {
+    this.clienteService.listar().subscribe(res => {
+      this.pacientes = res;
+    });
+  }
 
+  salvar() {
+
+    const consulta: Consulta = {
+      dataConsulta: this.dataConsulta,
+      observacoes: this.observacoes,
+      paciente: {
+        id: this.pacienteSelecionado
+      }
+    };
+
+    this.consultaService.salvar(consulta).subscribe(() => {
+      this.carregarConsultas();
+      this.limpar();
+    });
+  }
+
+  excluir(id: number) {
+    this.consultaService.excluir(id).subscribe(() => {
+      this.carregarConsultas();
+    });
+  }
+
+  limpar() {
+    this.dataConsulta = '';
+    this.observacoes = '';
+    this.pacienteSelecionado = 0;
+  }
 }

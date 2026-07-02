@@ -20,15 +20,19 @@ export class ClienteService {
     return this.http.post<Cliente>(this.api, cliente);
   }
 
-  excluir(id: string): Observable<void> {
+  excluir(id: number): Observable<void> {
     return this.http.delete<void>(`${this.api}/${id}`);
   }
 
-  buscarPorId(id: string): Observable<Cliente> {
+  buscarPorId(id: number): Observable<Cliente> {
     return this.http.get<Cliente>(`${this.api}/${id}`);
   }
 
   atualizar(cliente: Cliente) {
     return this.http.put<Cliente>(`${this.api}/${cliente.id}`, cliente);
   }
+
+  getConsultasPorPaciente(id: number) {
+  return this.http.get<any[]>(`http://localhost:8080/pacientes/${id}`);
+}
 }
