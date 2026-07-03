@@ -2,43 +2,73 @@
 
   <h2>Consultas</h2>
 
-  <div class="form">
+  <div class="form-card">
 
-    <input type="date" [(ngModel)]="dataConsulta" />
+    <h3 *ngIf="consultaEditandoId">Editando consulta de {{ pacienteSelecionadoNome }}</h3>
 
-    <input type="text" placeholder="Observações" [(ngModel)]="observacoes" />
+    <div class="form-linha-topo">
 
-    <select [(ngModel)]="pacienteSelecionado">
-      <option value="">Selecione o paciente</option>
-      <option *ngFor="let p of pacientes" [value]="p.id">
-        {{ p.nome }}
-      </option>
-    </select>
+      <div class="campo">
+        <label>Data</label>
+        <input type="date" [(ngModel)]="dataConsulta" />
+      </div>
 
-    <button (click)="salvar()">
-      Salvar consulta
-    </button>
+      <div class="campo campo-paciente">
+        <label>Paciente</label>
+        <select [(ngModel)]="pacienteSelecionado">
+          <option value="">Selecione o paciente</option>
+          <option *ngFor="let p of pacientes" [value]="p.id">
+            {{ p.nome }}
+          </option>
+        </select>
+      </div>
+
+    </div>
+
+    <div class="campo campo-evolucao">
+      <label>Evolução da Consulta</label>
+      <textarea
+        rows="10"
+        [(ngModel)]="observacoes"
+        placeholder="Descreva o andamento da sessão: temas trabalhados, comportamento e humor do paciente, intervenções realizadas, reações observadas e encaminhamentos para a próxima consulta..."
+      ></textarea>
+    </div>
+
+    <div class="form-acoes">
+      <button (click)="salvar()">
+        {{ consultaEditandoId ? 'Atualizar consulta' : 'Salvar consulta' }}
+      </button>
+
+      <button *ngIf="consultaEditandoId" (click)="limpar()">
+        Cancelar edição
+      </button>
+    </div>
 
   </div>
 
   <hr />
 
+  <h3>Histórico de Consultas</h3>
+
   <table border="1" width="100%">
     <tr>
       <th>Data</th>
-      <th>Observações</th>
       <th>Paciente</th>
+      <th>Evolução</th>
       <th>Ações</th>
     </tr>
 
     <tr *ngFor="let c of consultas">
-      <td>{{ c.dataConsulta }}</td>
-      <td>{{ c.observacoes }}</td>
-      <td>{{ c.paciente?.nome }}</td>
+      <td>{{ c.dataConsulta | dataBr }}</td>
       <td>
-        <button (click)="excluir(c.id!)">
-          Excluir
-        </button>
+        <a [routerLink]="['/pacientes', c.paciente?.id]" style="color:blue; cursor:pointer">
+          {{ c.paciente?.nome }}
+        </a>
+      </td>
+      <td>{{ c.observacoes }}</td>
+      <td>
+        <button (click)="editar(c)">Editar</button>
+        <button (click)="excluir(c.id!)">Excluir</button>
       </td>
     </tr>
   </table>

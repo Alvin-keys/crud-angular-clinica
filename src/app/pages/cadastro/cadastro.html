@@ -2,11 +2,13 @@
 
   <mat-card class="content">
 
-    <mat-card-title>Dados Pessoais</mat-card-title>
+    <mat-card-title>Cadastro de Paciente</mat-card-title>
 
     <mat-card-content>
 
       <form (ngSubmit)="salvar()">
+
+        <h3 class="secao-titulo">Dados Pessoais</h3>
 
         <mat-form-field appearance="outline">
           <mat-label>Nome</mat-label>
@@ -18,7 +20,7 @@
           <input matInput name="email" [(ngModel)]="cliente.email" />
         </mat-form-field>
 
-           <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline">
           <mat-label>Telefone</mat-label>
           <input matInput name="telefone" [(ngModel)]="cliente.telefone" />
         </mat-form-field>
@@ -28,11 +30,54 @@
           <input matInput type="date" name="dataPrimeiraConsulta" [(ngModel)]="cliente.dataPrimeiraConsulta">
         </mat-form-field>
 
-     
+        <mat-form-field appearance="outline">
+          <mat-label>Idade</mat-label>
+          <input matInput type="number" name="idade" [(ngModel)]="cliente.idade" />
+        </mat-form-field>
 
-        <button type="submit">
-  Salvar
-</button>
+        <mat-form-field appearance="outline">
+          <mat-label>Contato de Emergência</mat-label>
+          <input matInput name="contatoEmergencia" [(ngModel)]="cliente.contatoEmergencia" />
+        </mat-form-field>
+
+        <h3 class="secao-titulo">Anamnese</h3>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Queixa Principal</mat-label>
+          <textarea matInput name="queixaPrincipal" [(ngModel)]="cliente.queixaPrincipal" rows="3"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Composição Familiar</mat-label>
+          <textarea matInput name="composicaoFamiliar" [(ngModel)]="cliente.composicaoFamiliar" rows="3"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Rotina</mat-label>
+          <textarea matInput name="rotina" [(ngModel)]="cliente.rotina" rows="3"></textarea>
+        </mat-form-field>
+
+        <h3 class="secao-titulo">Agendamento</h3>
+
+        <div class="dias-semana">
+          <label *ngFor="let dia of diasSemana">
+            <input
+              type="checkbox"
+              [checked]="diasSelecionados.includes(dia)"
+              (change)="toggleDia(dia)"
+            />
+            {{ dia }}
+          </label>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Horário</mat-label>
+          <input matInput type="time" name="horarioAtendimento" [(ngModel)]="cliente.horarioAtendimento" />
+        </mat-form-field>
+
+        <button type="submit" mat-raised-button color="primary" class="botao-salvar">
+          Salvar
+        </button>
 
       </form>
 

@@ -4,9 +4,9 @@ import { PacientesComponent } from './pages/pacientes/pacientes';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'pacientes',
-    pathMatch: 'full'
-},
+    loadComponent: () =>
+      import('./pages/landing/landing').then(m => m.LandingComponent)
+  },
   {
     path: 'cadastro',
     loadComponent: () =>
@@ -18,7 +18,12 @@ export const routes: Routes = [
       import('./pages/consulta/consulta').then(m => m.ConsultaComponent)
   },
   {
-  path: 'pacientes',
-  component: PacientesComponent
-}
+    path: 'pacientes',
+    component: PacientesComponent
+  },
+  {
+    path: 'pacientes/:id',
+    loadComponent: () =>
+      import('./pages/detalhe-paciente/detalhe-paciente').then(m => m.DetalhePacienteComponent)
+  }
 ];

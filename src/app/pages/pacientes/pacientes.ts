@@ -1,15 +1,16 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { ClienteService } from '../../services/cliente.service';
 import { Cliente } from '../../models/cliente';
 import { Router } from '@angular/router';
-import { ConsultaService } from '../../services/consulta.service';
+import { DataBrPipe } from '../../pipes/data-br.pipe';
 
 @Component({
   selector: 'app-pacientes',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink, DataBrPipe],
   templateUrl: './pacientes.html',
   styleUrl: './pacientes.scss'
 })
@@ -17,9 +18,11 @@ export class PacientesComponent {
 
   private clienteService = inject(ClienteService);
   private router = inject(Router);
-  private consultaService = inject(ConsultaService);
 
   pacientes: Cliente[] = [];
+
+  diasSemana = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
+  diasSelecionados: string[] = [];
 
   paciente: Cliente = {
     nome: '',
@@ -27,9 +30,6 @@ export class PacientesComponent {
     telefone: '',
     dataPrimeiraConsulta: ''
   };
-
-  consultasPaciente: any[] = [];
-pacienteSelecionadoNome = '';
 
   ngOnInit() {
     this.listar();
@@ -41,7 +41,18 @@ pacienteSelecionadoNome = '';
     });
   }
 
+  toggleDia(dia: string) {
+    const index = this.diasSelecionados.indexOf(dia);
+    if (index >= 0) {
+      this.diasSelecionados.splice(index, 1);
+    } else {
+      this.diasSelecionados.push(dia);
+    }
+  }
+
   salvar() {
+    this.paciente.diasAtendimento = this.diasSelecionados.join(', ');
+
     if (this.paciente.id) {
       this.clienteService.atualizar(this.paciente).subscribe(() => {
         this.listar();
@@ -57,13 +68,14 @@ pacienteSelecionadoNome = '';
 
   editar(p: Cliente) {
     this.paciente = { ...p };
+    this.diasSelecionados = p.diasAtendimento ? p.diasAtendimento.split(', ') : [];
   }
 
   excluir(id: number) {
-  this.clienteService.excluir(id).subscribe(() => {
-    this.listar();
-  });
-}
+    this.clienteService.excluir(id).subscribe(() => {
+      this.listar();
+    });
+  }
 
   limpar() {
     this.paciente = {
@@ -72,18 +84,10 @@ pacienteSelecionadoNome = '';
       telefone: '',
       dataPrimeiraConsulta: ''
     };
+    this.diasSelecionados = [];
   }
 
-  verConsultas(p: Cliente) {
-
-  this.pacienteSelecionadoNome = p.nome;
-
-  this.consultaService.buscarPorPaciente(p.id!)
-    .subscribe(res => {
-      this.consultasPaciente = res;
-    });
-}
   novoPaciente() {
-  this.router.navigate(['/cadastro']);
-}
+    this.router.navigate(['/cadastro']);
+  }
 }

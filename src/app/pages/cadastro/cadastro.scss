@@ -1,20 +1,54 @@
 .container {
   display: flex;
   justify-content: center;
-  padding: 20px;
+  padding: 24px;
 }
 
 .content {
   width: 100%;
-  max-width: 500px;
+  max-width: 560px;
+  padding: 8px 8px 24px;
+}
+
+.secao-titulo {
+  margin: 20px 0 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--mat-sys-primary);
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 6px;
+
+  &:first-of-type {
+    margin-top: 4px;
+  }
 }
 
 form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
 }
 
 mat-form-field {
   width: 100%;
+  display: block;
+}
+
+.dias-semana {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 8px 0 16px;
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.9rem;
+  }
+}
+
+.botao-salvar {
+  margin-top: 12px;
+  align-self: flex-start;
+  padding: 0 32px;
 }

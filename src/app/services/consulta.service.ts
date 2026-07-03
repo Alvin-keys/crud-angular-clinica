@@ -29,11 +29,15 @@ export class ConsultaService {
     return this.http.post<Consulta>(this.api, consulta);
   }
 
+  atualizar(consulta: Consulta): Observable<Consulta> {
+    return this.http.put<Consulta>(`${this.api}/${consulta.id}`, consulta);
+  }
+
   excluir(id: number): Observable<void> {
     return this.http.delete<void>(`${this.api}/${id}`);
   }
 
- buscarPorPaciente(pacienteId: number): Observable<Consulta[]> {
+  buscarPorPaciente(pacienteId: number): Observable<Consulta[]> {
     return this.http.get<any[]>(`${this.api}/paciente/${pacienteId}`);
   }
 }

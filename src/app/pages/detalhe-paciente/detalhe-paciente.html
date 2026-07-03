@@ -1,0 +1,80 @@
+<div class="container">
+
+  <a routerLink="/pacientes">&larr; Voltar para Pacientes</a>
+
+  <ng-container *ngIf="paciente">
+
+    <h2>{{ paciente.nome }}</h2>
+
+    <h3>Dados do Paciente (Anamnese)</h3>
+
+    <table border="1" width="100%">
+      <tr>
+        <th>Nome</th>
+        <td>{{ paciente.nome }}</td>
+      </tr>
+      <tr>
+        <th>Email</th>
+        <td>{{ paciente.email }}</td>
+      </tr>
+      <tr>
+        <th>Telefone</th>
+        <td>{{ paciente.telefone }}</td>
+      </tr>
+      <tr>
+        <th>Data da Primeira Consulta (DPC)</th>
+        <td>{{ paciente.dataPrimeiraConsulta | dataBr }}</td>
+      </tr>
+      <tr>
+        <th>Idade</th>
+        <td>{{ paciente.idade }}</td>
+      </tr>
+      <tr>
+        <th>Queixa Principal</th>
+        <td>{{ paciente.queixaPrincipal }}</td>
+      </tr>
+      <tr>
+        <th>Composição Familiar</th>
+        <td>{{ paciente.composicaoFamiliar || 'Não informado' }}</td>
+      </tr>
+      <tr>
+        <th>Rotina</th>
+        <td>{{ paciente.rotina || 'Não informado' }}</td>
+      </tr>
+      <tr>
+        <th>Contato de Emergência</th>
+        <td>{{ paciente.contatoEmergencia || 'Não informado' }}</td>
+      </tr>
+      <tr>
+        <th>Agendamento</th>
+        <td>
+          {{ paciente.diasAtendimento || 'Não definido' }}
+          <span *ngIf="paciente.horarioAtendimento"> às {{ paciente.horarioAtendimento }}</span>
+        </td>
+      </tr>
+    </table>
+
+    <hr>
+
+    <h3>Evolução das Consultas</h3>
+
+    <table border="1" width="100%" *ngIf="consultas.length > 0; else semConsultas">
+      <tr>
+        <th>Data</th>
+        <th>Observações (Evolução)</th>
+      </tr>
+      <tr *ngFor="let c of consultas">
+        <td>{{ c.dataConsulta | dataBr }}</td>
+        <td>{{ c.observacoes }}</td>
+      </tr>
+    </table>
+
+    <ng-template #semConsultas>
+      <p>Nenhuma consulta registrada além da primeira consulta.</p>
+    </ng-template>
+
+  </ng-container>
+
+  <p *ngIf="!paciente && !carregando">Paciente não encontrado.</p>
+
+</div>

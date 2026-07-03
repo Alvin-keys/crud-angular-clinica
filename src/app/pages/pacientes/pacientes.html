@@ -11,17 +11,38 @@
     <!-- FORMULÁRIO -->
     <div class="form">
 
+        <h3 *ngIf="paciente.id">Editando: {{ paciente.nome }}</h3>
+
         <input type="text" placeholder="Nome" [(ngModel)]="paciente.nome">
         <input type="text" placeholder="Email" [(ngModel)]="paciente.email">
         <input type="text" placeholder="Telefone" [(ngModel)]="paciente.telefone">
         <input type="date" [(ngModel)]="paciente.dataPrimeiraConsulta">
 
+        <input type="number" placeholder="Idade" [(ngModel)]="paciente.idade">
+        <input type="text" placeholder="Queixa Principal" [(ngModel)]="paciente.queixaPrincipal">
+        <input type="text" placeholder="Composição Familiar" [(ngModel)]="paciente.composicaoFamiliar">
+        <input type="text" placeholder="Rotina" [(ngModel)]="paciente.rotina">
+        <input type="text" placeholder="Contato de Emergência" [(ngModel)]="paciente.contatoEmergencia">
+
+        <div class="dias-semana">
+            <label *ngFor="let dia of diasSemana">
+                <input
+                    type="checkbox"
+                    [checked]="diasSelecionados.includes(dia)"
+                    (change)="toggleDia(dia)"
+                />
+                {{ dia }}
+            </label>
+        </div>
+
+        <input type="time" [(ngModel)]="paciente.horarioAtendimento">
+
         <button (click)="salvar()">
-            Salvar
+            {{ paciente.id ? 'Atualizar' : 'Salvar' }}
         </button>
 
         <button (click)="limpar()">
-            Limpar
+            {{ paciente.id ? 'Cancelar edição' : 'Limpar' }}
         </button>
 
     </div>
@@ -33,48 +54,26 @@
 
         <tr>
             <th>Nome</th>
-            <th>Email</th>
-            <th>Telefone</th>
-            <th>Data</th>
+            <th>Agendamento</th>
             <th>Ações</th>
         </tr>
 
         <tr *ngFor="let p of pacientes">
             <td>
-                <span style="color:blue; cursor:pointer" (click)="verConsultas(p)">
+                <a [routerLink]="['/pacientes', p.id]" style="color:blue; cursor:pointer">
                     {{ p.nome }}
-                </span>
+                </a>
             </td>
-            <td>{{ p.email }}</td>
-            <td>{{ p.telefone }}</td>
-            <td>{{ p.dataPrimeiraConsulta }}</td>
             <td>
-                <button (click)="verConsultas(p)">Ver consultas</button>
+                {{ p.diasAtendimento || 'Não definido' }}
+                <span *ngIf="p.horarioAtendimento"> às {{ p.horarioAtendimento }}</span>
+            </td>
+            <td>
+                <button (click)="editar(p)">Editar</button>
                 <button (click)="excluir(p.id!)">Excluir</button>
             </td>
         </tr>
 
     </table>
-
-    <hr>
-
-    <h3>Consultas de {{ pacienteSelecionadoNome }}</h3>
-
-    <table border="1" width="100%">
-
-        <tr>
-            <th>Data</th>
-            <th>Observações</th>
-        </tr>
-
-        <tr *ngFor="let c of consultasPaciente">
-            <td>{{ c.dataConsulta }}</td>
-            <td>{{ c.observacoes }}</td>
-        </tr>
-
-    </table>
-
-    <hr>
-
 
 </div>
