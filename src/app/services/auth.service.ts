@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 export interface StatusLogin {
   autenticado: boolean;
@@ -12,18 +12,29 @@ export interface StatusLogin {
 export class AuthService {
 
   private api = 'http://localhost:8080/auth';
+  private chaveToken = 'clinica_token';
 
   constructor(private http: HttpClient) {}
 
-  login(usuario: string, senha: string): Observable<any> {
-    return this.http.post(`${this.api}/login`, { usuario, senha }, { withCredentials: true });
+  login(usuario: string, senha: string): Observable<{ token: string }> {
+    return this.http.post<{ token: string }>(`${this.api}/login`, { usuario, senha }).pipe(
+      tap(res => localStorage.setItem(this.chaveToken, res.token))
+    );
   }
 
-  logout(): Observable<any> {
-    return this.http.post(`${this.api}/logout`, {}, { withCredentials: true });
+  logout(): void {
+    localStorage.removeItem(this.chaveToken);
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem(this.chaveToken);
+  }
+
+  estaLogado(): boolean {
+    return !!this.getToken();
   }
 
   status(): Observable<StatusLogin> {
-    return this.http.get<StatusLogin>(`${this.api}/status`, { withCredentials: true });
+    return this.http.get<StatusLogin>(`${this.api}/status`);
   }
 }

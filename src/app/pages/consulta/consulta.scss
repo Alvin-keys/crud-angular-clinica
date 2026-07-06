@@ -61,3 +61,18 @@
   display: flex;
   gap: 8px;
 }
+
+.aviso-rascunho {
+  background: #fff3cd;
+  border: 1px solid #ffe08a;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  color: #7a5c00;
+}
+
+.rascunho-info {
+  font-size: 0.75rem;
+  color: #999;
+  margin-top: 4px;
+}

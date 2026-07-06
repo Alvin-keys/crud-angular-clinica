@@ -33,8 +33,7 @@ export class App {
   }
 
   sair() {
-    this.authService.logout().subscribe(() => {
-      this.router.navigate(['/']);
-    });
+    this.authService.logout();
+    this.router.navigate(['/']);
   }
 }

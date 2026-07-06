@@ -19,6 +19,8 @@ export class ConsultaComponent {
   private consultaService = inject(ConsultaService);
   private clienteService = inject(ClienteService);
 
+  private chaveRascunho = 'consulta_rascunho';
+
   consultas: Consulta[] = [];
   pacientes: Cliente[] = [];
 
@@ -29,9 +31,12 @@ export class ConsultaComponent {
   consultaEditandoId?: number;
   pacienteSelecionadoNome = '';
 
+  rascunhoRestaurado = false;
+
   ngOnInit() {
     this.carregarConsultas();
     this.carregarPacientes();
+    this.restaurarRascunho();
   }
 
   carregarConsultas() {
@@ -44,6 +49,38 @@ export class ConsultaComponent {
     this.clienteService.listar().subscribe(res => {
       this.pacientes = res;
     });
+  }
+
+  restaurarRascunho() {
+    const rascunho = localStorage.getItem(this.chaveRascunho);
+    if (!rascunho) {
+      return;
+    }
+
+    const dados = JSON.parse(rascunho);
+    if (dados.observacoes) {
+      this.dataConsulta = dados.dataConsulta ?? '';
+      this.observacoes = dados.observacoes ?? '';
+      this.pacienteSelecionado = dados.pacienteSelecionado ?? 0;
+      this.rascunhoRestaurado = true;
+    }
+  }
+
+  salvarRascunho() {
+    if (this.consultaEditandoId) {
+      return;
+    }
+
+    localStorage.setItem(this.chaveRascunho, JSON.stringify({
+      dataConsulta: this.dataConsulta,
+      observacoes: this.observacoes,
+      pacienteSelecionado: this.pacienteSelecionado
+    }));
+  }
+
+  limparRascunho() {
+    localStorage.removeItem(this.chaveRascunho);
+    this.rascunhoRestaurado = false;
   }
 
   salvar() {
@@ -67,16 +104,30 @@ export class ConsultaComponent {
       }
     };
 
-    if (this.consultaEditandoId) {
-      this.consultaService.atualizar(consulta).subscribe(() => {
+    const acao = this.consultaEditandoId
+      ? this.consultaService.atualizar(consulta)
+      : this.consultaService.salvar(consulta);
+
+    acao.subscribe({
+      next: () => {
         this.carregarConsultas();
+        this.limparRascunho();
         this.limpar();
-      });
+      },
+      error: (erro) => {
+        this.mostrarErro(erro);
+      }
+    });
+  }
+
+  private mostrarErro(erro: any) {
+    if (erro.status === 400 && erro.error) {
+      const mensagens = Object.values(erro.error).join('\n');
+      alert(`Corrija os seguintes campos:\n${mensagens}`);
+    } else if (erro.error?.mensagem) {
+      alert(erro.error.mensagem);
     } else {
-      this.consultaService.salvar(consulta).subscribe(() => {
-        this.carregarConsultas();
-        this.limpar();
-      });
+      alert('Ocorreu um erro ao salvar. Tente novamente.');
     }
   }
 
@@ -117,5 +168,6 @@ export class ConsultaComponent {
     this.observacoes = '';
     this.pacienteSelecionado = 0;
     this.pacienteSelecionadoNome = '';
+    this.rascunhoRestaurado = false;
   }
 }

@@ -6,16 +6,20 @@
 
     <h3 *ngIf="consultaEditandoId">Editando consulta de {{ pacienteSelecionadoNome }}</h3>
 
+    <p class="aviso-rascunho" *ngIf="rascunhoRestaurado">
+      Recuperamos automaticamente um texto que você estava escrevendo antes de sair da tela.
+    </p>
+
     <div class="form-linha-topo">
 
       <div class="campo">
         <label>Data</label>
-        <input type="date" [(ngModel)]="dataConsulta" />
+        <input type="date" [(ngModel)]="dataConsulta" (ngModelChange)="salvarRascunho()" />
       </div>
 
       <div class="campo campo-paciente">
         <label>Paciente</label>
-        <select [(ngModel)]="pacienteSelecionado">
+        <select [(ngModel)]="pacienteSelecionado" (ngModelChange)="salvarRascunho()">
           <option value="">Selecione o paciente</option>
           <option *ngFor="let p of pacientes" [value]="p.id">
             {{ p.nome }}
@@ -30,8 +34,10 @@
       <textarea
         rows="10"
         [(ngModel)]="observacoes"
+        (ngModelChange)="salvarRascunho()"
         placeholder="Descreva o andamento da sessão: temas trabalhados, comportamento e humor do paciente, intervenções realizadas, reações observadas e encaminhamentos para a próxima consulta..."
       ></textarea>
+      <span class="rascunho-info">Rascunho salvo automaticamente neste navegador.</span>
     </div>
 
     <div class="form-acoes">
