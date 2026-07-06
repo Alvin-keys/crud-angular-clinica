@@ -11,7 +11,7 @@ export interface StatusLogin {
 })
 export class AuthService {
 
-  private api = 'http://localhost:8080/auth';
+  private api = 'https://clinica-tanandra-api.onrender.com/auth';
   private chaveToken = 'clinica_token';
 
   constructor(private http: HttpClient) {}

@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class ClienteService {
 
-  private api = 'http://localhost:8080/pacientes';
+  private api = 'https://clinica-tanandra-api.onrender.com/pacientes';
 
   constructor(private http: HttpClient) { }
 
@@ -33,6 +33,6 @@ export class ClienteService {
   }
 
   getConsultasPorPaciente(id: number) {
-    return this.http.get<any[]>(`http://localhost:8080/pacientes/${id}`, { withCredentials: true });
+    return this.http.get<any[]>(`https://clinica-tanandra-api.onrender.com/pacientes/${id}`, { withCredentials: true });
   }
 }

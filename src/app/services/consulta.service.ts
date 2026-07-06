@@ -17,7 +17,7 @@ export interface Consulta {
 })
 export class ConsultaService {
 
-  private api = 'http://localhost:8080/consultas';
+  private api = 'https://clinica-tanandra-api.onrender.com/consultas';
 
   constructor(private http: HttpClient) {}
 
