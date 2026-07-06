@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface StatusLogin {
   autenticado: boolean;
@@ -11,7 +12,7 @@ export interface StatusLogin {
 })
 export class AuthService {
 
-  private api = 'https://clinica-tanandra-api.onrender.com/auth';
+  private api = `${environment.apiUrl}/auth`;
   private chaveToken = 'clinica_token';
 
   constructor(private http: HttpClient) {}

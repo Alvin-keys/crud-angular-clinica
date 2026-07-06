@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface Consulta {
   id?: number;
@@ -17,27 +18,27 @@ export interface Consulta {
 })
 export class ConsultaService {
 
-  private api = 'https://clinica-tanandra-api.onrender.com/consultas';
+  private api = `${environment.apiUrl}/consultas`;
 
   constructor(private http: HttpClient) {}
 
   listar(): Observable<Consulta[]> {
-    return this.http.get<Consulta[]>(this.api, { withCredentials: true });
+    return this.http.get<Consulta[]>(this.api);
   }
 
   salvar(consulta: Consulta): Observable<Consulta> {
-    return this.http.post<Consulta>(this.api, consulta, { withCredentials: true });
+    return this.http.post<Consulta>(this.api, consulta);
   }
 
   atualizar(consulta: Consulta): Observable<Consulta> {
-    return this.http.put<Consulta>(`${this.api}/${consulta.id}`, consulta, { withCredentials: true });
+    return this.http.put<Consulta>(`${this.api}/${consulta.id}`, consulta);
   }
 
   excluir(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.api}/${id}`, { withCredentials: true });
+    return this.http.delete<void>(`${this.api}/${id}`);
   }
 
   buscarPorPaciente(pacienteId: number): Observable<Consulta[]> {
-    return this.http.get<any[]>(`${this.api}/paciente/${pacienteId}`, { withCredentials: true });
+    return this.http.get<any[]>(`${this.api}/paciente/${pacienteId}`);
   }
 }
