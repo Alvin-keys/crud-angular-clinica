@@ -13,7 +13,9 @@ export class LandingComponent {
 
   private router = inject(Router);
 
+  anoAtual = new Date().getFullYear();
+
   entrar() {
-    this.router.navigate(['/pacientes']);
+    this.router.navigate(['/login']);
   }
 }

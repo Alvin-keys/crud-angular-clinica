@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,7 @@ export class App {
   protected readonly title = signal('crud-angular-material');
 
   private router = inject(Router);
+  private authService = inject(AuthService);
   private urlAtual = signal(this.router.url);
 
   constructor() {
@@ -27,6 +29,12 @@ export class App {
   }
 
   mostrarToolbar() {
-    return this.urlAtual() !== '/';
+    return this.urlAtual() !== '/' && this.urlAtual() !== '/login';
+  }
+
+  sair() {
+    this.authService.logout().subscribe(() => {
+      this.router.navigate(['/']);
+    });
   }
 }

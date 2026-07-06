@@ -6,7 +6,7 @@
 
     <h2>{{ paciente.nome }}</h2>
 
-    <h3>Dados do Paciente (Anamnese)</h3>
+    <h3>Dados Pessoais</h3>
 
     <table border="1" width="100%">
       <tr>
@@ -30,8 +30,19 @@
         <td>{{ paciente.idade }}</td>
       </tr>
       <tr>
+        <th>Contato de Emergência</th>
+        <td>{{ paciente.contatoEmergencia || 'Não informado' }}</td>
+      </tr>
+    </table>
+
+    <hr>
+
+    <h3>Anamnese</h3>
+
+    <table border="1" width="100%">
+      <tr>
         <th>Queixa Principal</th>
-        <td>{{ paciente.queixaPrincipal }}</td>
+        <td>{{ paciente.queixaPrincipal || 'Não informado' }}</td>
       </tr>
       <tr>
         <th>Composição Familiar</th>
@@ -41,16 +52,20 @@
         <th>Rotina</th>
         <td>{{ paciente.rotina || 'Não informado' }}</td>
       </tr>
+    </table>
+
+    <hr>
+
+    <h3>Agendamento</h3>
+
+    <table border="1" width="100%">
       <tr>
-        <th>Contato de Emergência</th>
-        <td>{{ paciente.contatoEmergencia || 'Não informado' }}</td>
+        <th>Dias de Atendimento</th>
+        <td>{{ paciente.diasAtendimento || 'Não definido' }}</td>
       </tr>
       <tr>
-        <th>Agendamento</th>
-        <td>
-          {{ paciente.diasAtendimento || 'Não definido' }}
-          <span *ngIf="paciente.horarioAtendimento"> às {{ paciente.horarioAtendimento }}</span>
-        </td>
+        <th>Horário</th>
+        <td>{{ paciente.horarioAtendimento || 'Não definido' }}</td>
       </tr>
     </table>
 

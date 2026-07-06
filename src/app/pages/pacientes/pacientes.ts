@@ -72,6 +72,17 @@ export class PacientesComponent {
   }
 
   excluir(id: number) {
+    const paciente = this.pacientes.find(p => p.id === id);
+    const nome = paciente?.nome ?? 'este paciente';
+
+    const confirmado = confirm(
+      `Tem certeza que deseja excluir ${nome}? Todas as consultas dele também serão excluídas. Essa ação não pode ser desfeita.`
+    );
+
+    if (!confirmado) {
+      return;
+    }
+
     this.clienteService.excluir(id).subscribe(() => {
       this.listar();
     });

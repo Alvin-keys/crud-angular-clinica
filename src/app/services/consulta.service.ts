@@ -22,22 +22,22 @@ export class ConsultaService {
   constructor(private http: HttpClient) {}
 
   listar(): Observable<Consulta[]> {
-    return this.http.get<Consulta[]>(this.api);
+    return this.http.get<Consulta[]>(this.api, { withCredentials: true });
   }
 
   salvar(consulta: Consulta): Observable<Consulta> {
-    return this.http.post<Consulta>(this.api, consulta);
+    return this.http.post<Consulta>(this.api, consulta, { withCredentials: true });
   }
 
   atualizar(consulta: Consulta): Observable<Consulta> {
-    return this.http.put<Consulta>(`${this.api}/${consulta.id}`, consulta);
+    return this.http.put<Consulta>(`${this.api}/${consulta.id}`, consulta, { withCredentials: true });
   }
 
   excluir(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.api}/${id}`);
+    return this.http.delete<void>(`${this.api}/${id}`, { withCredentials: true });
   }
 
   buscarPorPaciente(pacienteId: number): Observable<Consulta[]> {
-    return this.http.get<any[]>(`${this.api}/paciente/${pacienteId}`);
+    return this.http.get<any[]>(`${this.api}/paciente/${pacienteId}`, { withCredentials: true });
   }
 }

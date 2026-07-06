@@ -1,0 +1,31 @@
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fdfaf5;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 360px;
+  padding: 8px 8px 24px;
+}
+
+mat-form-field {
+  width: 100%;
+  display: block;
+}
+
+.erro {
+  color: #c62828;
+  font-size: 0.85rem;
+  margin: -8px 0 8px;
+}
+
+.botao-entrar {
+  width: 100%;
+  margin-top: 8px;
+}

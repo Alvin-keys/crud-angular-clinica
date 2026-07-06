@@ -47,6 +47,17 @@ export class ConsultaComponent {
   }
 
   salvar() {
+
+    if (!this.dataConsulta) {
+      alert('Selecione a data da consulta.');
+      return;
+    }
+
+    if (!this.pacienteSelecionado) {
+      alert('Selecione o paciente antes de salvar.');
+      return;
+    }
+
     const consulta: Consulta = {
       id: this.consultaEditandoId,
       dataConsulta: this.dataConsulta,
@@ -78,9 +89,26 @@ export class ConsultaComponent {
   }
 
   excluir(id: number) {
+    const consulta = this.consultas.find(c => c.id === id);
+    const dataFormatada = consulta ? this.formatarData(consulta.dataConsulta) : '';
+    const nomePaciente = consulta?.paciente?.nome ?? 'paciente';
+
+    const confirmado = confirm(
+      `Tem certeza que deseja excluir a consulta de ${nomePaciente} do dia ${dataFormatada}? Essa ação não pode ser desfeita.`
+    );
+
+    if (!confirmado) {
+      return;
+    }
+
     this.consultaService.excluir(id).subscribe(() => {
       this.carregarConsultas();
     });
+  }
+
+  private formatarData(data: string): string {
+    const [ano, mes, dia] = data.substring(0, 10).split('-');
+    return `${dia}/${mes}/${ano}`;
   }
 
   limpar() {
