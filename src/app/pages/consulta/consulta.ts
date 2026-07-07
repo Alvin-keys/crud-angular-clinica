@@ -41,8 +41,14 @@ export class ConsultaComponent {
 
   carregarConsultas() {
     this.consultaService.listar().subscribe(res => {
-      this.consultas = res;
+      this.consultas = this.ordenarPorDataDesc(res);
     });
+  }
+
+  private ordenarPorDataDesc(consultas: Consulta[]): Consulta[] {
+    return [...consultas].sort((a, b) =>
+      b.dataConsulta.localeCompare(a.dataConsulta)
+    );
   }
 
   carregarPacientes() {
